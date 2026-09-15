@@ -1,0 +1,1556 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050b16">
+  <title>X-PREDICTOR | Sancho Tech</title>
+  <meta name="description" content="X-PREDICTOR football predictions, betting tools and Aviator simulator. Developed by Sancho Tech.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --blue: #087cff;
+      --blue-dark: #061a35;
+      --yellow: #ffd21f;
+      --black: #050b16;
+      --panel: #0b1424;
+      --panel-2: #101d31;
+      --text: #f5f8ff;
+      --muted: #8ea2bd;
+      --border: rgba(255,255,255,.09);
+      --green: #19e58a;
+      --red: #ff5570;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 80% 0%, rgba(8,124,255,.16), transparent 30rem),
+        var(--black);
+      color: var(--text);
+      font-family: Inter, Arial, sans-serif;
+      line-height: 1.5;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+
+    .container {
+      width: min(1180px, calc(100% - 28px));
+      margin: auto;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(5,11,22,.92);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--blue), #0045a4);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: 0 0 25px rgba(8,124,255,.22);
+    }
+
+    .brand-logo svg { width: 28px; height: 28px; }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+
+    .brand-sub {
+      color: var(--yellow);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      margin-top: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      color: #b9c8dd;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 9px 11px;
+      border-radius: 9px;
+    }
+
+    .nav-links a:hover {
+      color: white;
+      background: rgba(255,255,255,.06);
+    }
+
+    .hero {
+      padding: 55px 0 35px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      align-items: center;
+      gap: 34px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--yellow);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .eyebrow span {
+      width: 7px;
+      height: 7px;
+      background: var(--yellow);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--yellow);
+    }
+
+    h1 {
+      font-size: clamp(38px, 6vw, 72px);
+      line-height: .98;
+      letter-spacing: -.06em;
+      margin: 0 0 17px;
+      font-weight: 900;
+    }
+
+    h1 em {
+      color: var(--yellow);
+      font-style: normal;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 560px;
+      font-size: 15px;
+      margin: 0 0 24px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 17px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+      transition: .2s;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: var(--yellow); color: #101010; }
+    .btn-blue { background: var(--blue); color: white; }
+    .btn-outline { background: transparent; color: white; border: 1px solid var(--border); }
+    .btn-small { padding: 9px 12px; font-size: 11px; }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+      border-radius: 24px;
+      border: 1px solid rgba(8,124,255,.25);
+      background:
+        linear-gradient(145deg, rgba(8,124,255,.2), transparent 60%),
+        var(--panel);
+      padding: 26px;
+      box-shadow: 0 20px 80px rgba(0,0,0,.24);
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      border: 1px solid rgba(8,124,255,.18);
+      right: -70px;
+      top: -70px;
+    }
+
+    .hero-card h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .hero-card p {
+      font-size: 12px;
+      margin: 0;
+    }
+
+    .hero-stat {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 9px;
+      margin-top: 25px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,.045);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 10px;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--yellow);
+      font-size: 21px;
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 7px;
+    }
+
+    .aircraft {
+      position: absolute;
+      right: 28px;
+      bottom: 42px;
+      width: 74px;
+      height: 74px;
+      display: grid;
+      place-items: center;
+      animation: floatPlane 2.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 13px rgba(255,210,31,.5));
+    }
+
+    .aircraft svg { width: 74px; height: 74px; }
+
+    @keyframes floatPlane {
+      0%,100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-14px) rotate(4deg); }
+    }
+
+    .section {
+      padding: 30px 0;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 15px;
+      margin-bottom: 17px;
+    }
+
+    .section-heading h2 {
+      font-size: 22px;
+      margin: 0;
+      letter-spacing: -.04em;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 4px 0 0;
+    }
+
+    .live-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .live-dot::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--green);
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 15px;
+    }
+
+    .tool-card {
+      background: linear-gradient(145deg, var(--panel-2), var(--panel));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      min-height: 190px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tool-card::after {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      right: -35px;
+      bottom: -35px;
+      background: rgba(8,124,255,.07);
+    }
+
+    .tool-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tool-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(8,124,255,.13);
+      color: #4ba4ff;
+    }
+
+    .tool-icon svg { width: 27px; height: 27px; }
+
+    .tool-icon.yellow {
+      background: rgba(255,210,31,.13);
+      color: var(--yellow);
+    }
+
+    .tool-icon.mwos {
+      background: linear-gradient(135deg,#ffdb25,#e88900);
+      color: #131313;
+    }
+
+    .tool-icon.aviator {
+      background: linear-gradient(135deg,#ffdb25,#ff7a00);
+      color: #101010;
+    }
+
+    .tool-card h3 {
+      font-size: 15px;
+      margin: 16px 0 6px;
+    }
+
+    .tool-card p {
+      font-size: 11px;
+      color: var(--muted);
+      margin: 0 0 15px;
+      max-width: 250px;
+    }
+
+    .tool-value {
+      color: var(--yellow);
+      font-size: 27px;
+      font-weight: 900;
+      letter-spacing: -.05em;
+    }
+
+    .tool-label {
+      color: var(--muted);
+      font-size: 10px;
+      margin-left: 5px;
+    }
+
+    .odds-list {
+      display: grid;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .odds-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 10px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.04);
+      font-size: 11px;
+    }
+
+    .odds-row b { color: var(--yellow); }
+
+    .aviator-panel {
+      background:
+        linear-gradient(180deg, rgba(8,124,255,.11), transparent 60%),
+        var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      overflow: hidden;
+    }
+
+    .aviator-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .aviator-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .aviator-title h3 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .aviator-title p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .crash-display {
+      position: relative;
+      height: 250px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.07);
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(8,124,255,.05), transparent),
+        repeating-linear-gradient(0deg, transparent 0 49px, rgba(255,255,255,.035) 50px),
+        repeating-linear-gradient(90deg, transparent 0 49px, rgba(255,255,255,.035) 50px),
+        #07101f;
+    }
+
+    .crash-display::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 55%, rgba(8,124,255,.08));
+      pointer-events: none;
+    }
+
+    .crash-line {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .crash-line svg { width: 100%; height: 100%; }
+
+    .crash-number {
+      position: absolute;
+      left: 50%;
+      top: 44%;
+      transform: translate(-50%,-50%);
+      font-size: clamp(40px,7vw,68px);
+      font-weight: 900;
+      letter-spacing: -.08em;
+      color: var(--yellow);
+      text-shadow: 0 0 30px rgba(255,210,31,.25);
+    }
+
+    .crash-status {
+      position: absolute;
+      left: 50%;
+      top: 64%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .crash-plane {
+      position: absolute;
+      left: 25%;
+      bottom: 22%;
+      width: 44px;
+      height: 44px;
+      transition: left .4s ease, bottom .4s ease;
+      filter: drop-shadow(0 0 12px rgba(255,210,31,.5));
+    }
+
+    .crash-plane svg { width: 100%; height: 100%; }
+
+    .crash-history {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      padding-top: 14px;
+    }
+
+    .crash-chip {
+      flex: 0 0 auto;
+      border-radius: 8px;
+      padding: 7px 10px;
+      background: rgba(255,255,255,.05);
+      font-size: 11px;
+      font-weight: 800;
+      color: #aabbd0;
+    }
+
+    .crash-chip.high { color: var(--yellow); }
+    .crash-chip.low { color: #ff6c83; }
+
+    .warning {
+      color: #8296b0;
+      font-size: 10px;
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+
+    .prediction-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .field {
+      min-width: 150px;
+      flex: 1;
+    }
+
+    .field label {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      color: white;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 11px 12px;
+      outline: none;
+    }
+
+    .field input:focus,
+    .field select:focus { border-color: var(--blue); }
+
+    .prediction-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .prediction-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1.5fr .8fr .7fr auto;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .match-league {
+      color: var(--yellow);
+      text-transform: uppercase;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      margin-bottom: 7px;
+    }
+
+    .teams {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .match-date {
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 6px;
+    }
+
+    .market {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+    }
+
+    .market small {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .market strong {
+      background: rgba(8,124,255,.15);
+      color: #62b2ff;
+      border: 1px solid rgba(8,124,255,.25);
+      border-radius: 7px;
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+
+    .confidence strong {
+      display: block;
+      font-size: 20px;
+      color: var(--green);
+    }
+
+    .confidence span {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .api-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 13px;
+    }
+
+    .api-status i {
+      width: 7px;
+      height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+    }
+
+    .api-status.error i { background: var(--red); }
+
+    .empty {
+      text-align: center;
+      padding: 35px 15px;
+      color: var(--muted);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      font-size: 12px;
+    }
+
+    .social-section {
+      margin-top: 25px;
+      padding: 27px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background:
+        linear-gradient(100deg, rgba(8,124,255,.13), rgba(255,210,31,.04)),
+        var(--panel);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .social-section h3 {
+      margin: 0 0 5px;
+      font-size: 16px;
+    }
+
+    .social-section p {
+      color: var(--muted);
+      font-size: 11px;
+      margin: 0;
+    }
+
+    .socials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .social {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      transition: .2s;
+    }
+
+    .social:hover {
+      background: var(--yellow);
+      color: #111;
+      transform: translateY(-3px);
+    }
+
+    .social svg { width: 19px; height: 19px; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      margin-top: 35px;
+      padding: 25px 0;
+      color: var(--muted);
+      font-size: 10px;
+      text-align: center;
+    }
+
+    footer b { color: var(--yellow); }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 50;
+      max-width: 310px;
+      background: #15253b;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--yellow);
+      color: white;
+      padding: 13px 15px;
+      border-radius: 10px;
+      font-size: 11px;
+      box-shadow: 0 15px 35px rgba(0,0,0,.25);
+      transform: translateY(120px);
+      opacity: 0;
+      transition: .25s;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .loading {
+      padding: 28px;
+      text-align: center;
+      color: var(--muted);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      font-size: 12px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,.2);
+      border-top-color: var(--yellow);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      vertical-align: middle;
+      margin-right: 7px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; padding-top: 38px; }
+      .tools-grid { grid-template-columns: 1fr; }
+      .hero-card { min-height: 250px; }
+      .prediction-card { grid-template-columns: 1.2fr .8fr; }
+      .prediction-card .confidence { text-align: right; }
+      .prediction-card .btn { grid-column: 1 / -1; width: 100%; }
+    }
+
+    @media (max-width: 560px) {
+      .container { width: min(100% - 20px, 1180px); }
+      .nav { min-height: 66px; }
+      .nav-links { gap: 2px; }
+      .nav-links a { padding: 7px 6px; font-size: 10px; }
+      .brand-name { font-size: 15px; }
+      .brand-sub { font-size: 8px; }
+      .brand-logo { width: 38px; height: 38px; flex-basis: 38px; }
+      h1 { font-size: 47px; }
+      .hero { gap: 20px; }
+      .hero-stat { grid-template-columns: repeat(3,1fr); }
+      .stat strong { font-size: 17px; }
+      .stat span { font-size: 9px; }
+      .prediction-card { grid-template-columns: 1fr 1fr; gap: 13px; }
+      .prediction-card .teams { font-size: 12px; }
+      .prediction-card .market { justify-self: end; }
+      .prediction-card .confidence { justify-self: end; }
+      .crash-display { height: 220px; }
+      .social-section { padding: 20px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SVG ICON DEFINITIONS -->
+  <svg style="display:none" aria-hidden="true">
+    <symbol id="icon-shield" viewBox="0 0 24 24">
+      <path d="M12 3l7 3v5c0 4.6-2.9 8.4-7 10-4.1-1.6-7-5.4-7-10V6l7-3z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M8.5 12l2.2 2.2 4.8-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <symbol id="icon-chart" viewBox="0 0 24 24">
+      <path d="M4 19V5M4 19h17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M7 15l3-4 3 2 5-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="18" cy="6" r="1.2" fill="currentColor"/>
+    </symbol>
+
+    <symbol id="icon-wallet" viewBox="0 0 24 24">
+      <path d="M4 7.5h15.5A1.5 1.5 0 0121 9v9a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2h13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M16 13h5M17 13a1 1 0 100 2 1 1 0 000-2z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+    </symbol>
+
+    <symbol id="icon-plane" viewBox="0 0 24 24">
+      <path d="M3 12l18-7-5 7 5 7-18-7z" fill="currentColor" stroke="currentColor" stroke-linejoin="round"/>
+      <path d="M10 12l3-2v4l-3-2z" fill="#07101f"/>
+    </symbol>
+
+    <symbol id="icon-refresh" viewBox="0 0 24 24">
+      <path d="M20 11a8 8 0 00-14.8-3L3 11M3 5v6h6M4 13a8 8 0 0014.8 3L21 13m0 6v-6h-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <symbol id="icon-whatsapp" viewBox="0 0 24 24">
+      <path d="M20.5 11.7a8.5 8.5 0 01-12.6 7.5L3 20l.9-4.6A8.5 8.5 0 1120.5 11.7z" fill="none" stroke="currentColor" stroke-width="1.7"/>
+      <path d="M8 8.5c.2-.5.5-.6.9-.6h.4c.3 0 .4.1.6.5l.7 1.6c.1.3.1.5-.1.7l-.6.7c.7 1.3 1.7 2.2 3.1 2.8l.6-.7c.2-.3.4-.3.7-.2l1.6.7c.3.1.4.3.3.7-.1.6-.5 1.2-1.1 1.4-.6.2-1.3.1-2.1-.2-2.9-1.2-4.7-3.1-5.3-5.1-.3-.9-.3-1.7.3-2.3z" fill="currentColor"/>
+    </symbol>
+
+    <symbol id="icon-facebook" viewBox="0 0 24 24">
+      <path d="M14 21v-8h2.7l.4-3H14V8.1c0-.9.3-1.5 1.6-1.5h1.7V4a21 21 0 00-2.5-.1c-2.5 0-4.2 1.5-4.2 4.3V10H8v3h2.6v8" fill="currentColor"/>
+    </symbol>
+
+    <symbol id="icon-telegram" viewBox="0 0 24 24">
+      <path d="M21 4L3.5 10.8c-.8.3-.8 1.4 0 1.7l4.4 1.6 1.7 5.3c.2.7 1 .9 1.5.4l2.4-2.4 4.7 3.5c.6.4 1.4.1 1.6-.6L22 5.3c.2-.8-.3-1.5-1-1.3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M8 14l10-7-7.3 8.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </symbol>
+
+    <symbol id="icon-instagram" viewBox="0 0 24 24">
+      <rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="12" cy="12" r="3.7" fill="none" stroke="currentColor" stroke-width="1.8"/>
+      <circle cx="17.3" cy="6.8" r="1" fill="currentColor"/>
+    </symbol>
+
+    <symbol id="icon-youtube" viewBox="0 0 24 24">
+      <path d="M21 8.2a2.5 2.5 0 00-1.8-1.8C17.6 6 12 6 12 6s-5.6 0-7.2.4A2.5 2.5 0 003 8.2 26 26 0 003 12a26 26 0 00.3 3.8 2.5 2.5 0 001.8 1.8C6.4 18 12 18 12 18s5.6 0 7.2-.4a2.5 2.5 0 001.8-1.8A26 26 0 0021 12a26 26 0 00-.3-3.8z" fill="none" stroke="currentColor" stroke-width="1.7"/>
+      <path d="M10 9l5 3-5 3V9z" fill="currentColor"/>
+    </symbol>
+
+    <symbol id="icon-tiktok" viewBox="0 0 24 24">
+      <path d="M14 4v10.2a3.5 3.5 0 11-3-3.4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+      <path d="M14 4c.3 2.3 1.7 3.8 4 4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
+  <header class="header">
+    <div class="container nav">
+      <a href="#" class="brand">
+        <div class="brand-logo">
+          <svg><use href="#icon-shield"/></svg>
+        </div>
+        <div>
+          <div class="brand-name">X-PREDICTOR</div>
+          <div class="brand-sub">DEVELOPED BY SANCHO TECH</div>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#predictions">Predictions</a>
+        <a href="#tools">Betting Tools</a>
+        <a href="#aviator">Aviator</a>
+        <a href="#socials">Socials</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow"><span></span> Smart betting dashboard</div>
+        <h1>Predict.<br><em>Play smarter.</em></h1>
+        <p>
+          Football predictions, betting odds tools and an Aviator
+          crash-point simulator — all in one powerful dashboard.
+        </p>
+        <div class="hero-actions">
+          <a href="#predictions" class="btn btn-primary">View Predictions</a>
+          <a href="#aviator" class="btn btn-outline">Open Aviator</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <h3>X-PREDICTOR Intelligence</h3>
+        <p>Explore available football predictions and simulated betting tools.</p>
+
+        <div class="hero-stat">
+          <div class="stat">
+            <strong id="heroMatches">--</strong>
+            <span>Matches loaded</span>
+          </div>
+          <div class="stat">
+            <strong>24/7</strong>
+            <span>Dashboard access</span>
+          </div>
+          <div class="stat">
+            <strong>3</strong>
+            <span>Betting tools</span>
+          </div>
+        </div>
+
+        <div class="aircraft">
+          <svg><use href="#icon-plane"/></svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="tools">
+      <div class="section-heading">
+        <div>
+          <h2>Betting Tools</h2>
+          <p>Quick access to your favourite betting platforms.</p>
+        </div>
+        <span class="live-dot">Dashboard online</span>
+      </div>
+
+      <div class="tools-grid">
+
+        <div class="tool-card">
+          <div class="tool-top">
+            <div class="tool-icon yellow">
+              <svg><use href="#icon-chart"/></svg>
+            </div>
+            <span class="badge">ODDS</span>
+          </div>
+          <h3>Betway Odds</h3>
+          <p>View sample market odds for common football selections.</p>
+
+          <div class="odds-list">
+            <div class="odds-row"><span>Home Win</span><b id="homeOdds">1.85</b></div>
+            <div class="odds-row"><span>Draw</span><b id="drawOdds">3.40</b></div>
+            <div class="odds-row"><span>Away Win</span><b id="awayOdds">4.20</b></div>
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-top">
+            <div class="tool-icon mwos">
+              <svg><use href="#icon-wallet"/></svg>
+            </div>
+            <span class="badge">MWOS</span>
+          </div>
+          <h3>MWOS Betting</h3>
+          <p>Dedicated section for your MWOS betting experience.</p>
+          <div>
+            <span class="tool-value">MWOS</span>
+            <span class="tool-label">BETTING</span>
+          </div>
+          <button class="btn btn-small btn-outline" style="margin-top:14px" onclick="showToast('MWOS Betting section selected')">
+            Open Section →
+          </button>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-top">
+            <div class="tool-icon aviator">
+              <svg><use href="#icon-plane"/></svg>
+            </div>
+            <span class="badge">AVIATOR</span>
+          </div>
+          <h3>Aviator Crash Points</h3>
+          <p>Use the simulator below to generate illustrative crash points.</p>
+          <div>
+            <span class="tool-value" id="miniCrash">1.00x</span>
+            <span class="tool-label">SIMULATED</span>
+          </div>
+          <button class="btn btn-small btn-primary" style="margin-top:14px" onclick="document.getElementById('aviator').scrollIntoView({behavior:'smooth'})">
+            Generate Point →
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section" id="aviator">
+      <div class="section-heading">
+        <div>
+          <h2>Aviator Crash Point Simulator</h2>
+          <p>Animated illustrative crash-point display.</p>
+        </div>
+        <span class="live-dot">Simulator ready</span>
+      </div>
+
+      <div class="aviator-panel">
+        <div class="aviator-header">
+          <div class="aviator-title">
+            <div class="tool-icon aviator">
+              <svg><use href="#icon-plane"/></svg>
+            </div>
+            <div>
+              <h3>AVIATOR</h3>
+              <p>X-PREDICTOR simulation engine</p>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-small" id="generateCrash">
+            <svg width="15" height="15"><use href="#icon-refresh"/></svg>
+            Generate
+          </button>
+        </div>
+
+        <div class="crash-display">
+          <div class="crash-line">
+            <svg viewBox="0 0 600 250" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="lineGrad" x1="0" x2="1">
+                  <stop offset="0%" stop-color="#087cff" stop-opacity="0"/>
+                  <stop offset="100%" stop-color="#ffd21f"/>
+                </linearGradient>
+              </defs>
+              <path d="M0 240 C80 236, 100 220, 150 215 S220 195, 280 160 S390 145, 450 70 S530 35, 600 10"
+                fill="none" stroke="url(#lineGrad)" stroke-width="3"/>
+            </svg>
+          </div>
+
+          <div class="crash-number" id="crashNumber">1.00x</div>
+          <div class="crash-status" id="crashStatus">Press generate to simulate</div>
+
+          <div class="crash-plane" id="crashPlane">
+            <svg><use href="#icon-plane"/></svg>
+          </div>
+        </div>
+
+        <div class="crash-history" id="crashHistory"></div>
+
+        <div class="warning">
+          ⚠️ <b>Notice:</b> These crash points are randomly generated
+          illustrative values for entertainment and interface demonstration.
+          They are not real Aviator predictions and cannot guarantee winnings.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="predictions">
+      <div class="section-heading">
+        <div>
+          <h2>Football Predictions</h2>
+          <p>Predictions loaded from your RapidAPI service.</p>
+        </div>
+        <button class="btn btn-outline btn-small" id="refreshPredictions">
+          <svg width="15" height="15"><use href="#icon-refresh"/></svg>
+          Refresh
+        </button>
+      </div>
+
+      <div class="prediction-toolbar">
+        <div class="field">
+          <label for="searchMatch">Search match</label>
+          <input id="searchMatch" type="search" placeholder="Team or competition...">
+        </div>
+        <div class="field">
+          <label for="marketFilter">Prediction market</label>
+          <select id="marketFilter">
+            <option value="all">All markets</option>
+            <option value="classic">Classic / 1X2</option>
+            <option value="over_25">Over 2.5</option>
+            <option value="over_35">Over 3.5</option>
+            <option value="btts">Both Teams To Score</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="api-status" id="apiStatus">
+        <i></i> Connecting to prediction API...
+      </div>
+
+      <div id="predictionList">
+        <div class="loading"><span class="spinner"></span> Loading predictions...</div>
+      </div>
+    </section>
+
+    <section class="social-section" id="socials">
+      <div>
+        <h3>Follow X-PREDICTOR</h3>
+        <p>Stay connected with Sancho Tech updates and betting tools.</p>
+      </div>
+
+      <div class="socials">
+        <a class="social" href="https://wa.me/" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <svg><use href="#icon-whatsapp"/></svg>
+        </a>
+        <a class="social" href="https://facebook.com/" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg><use href="#icon-facebook"/></svg>
+        </a>
+        <a class="social" href="https://t.me/" target="_blank" rel="noopener" aria-label="Telegram">
+          <svg><use href="#icon-telegram"/></svg>
+        </a>
+        <a class="social" href="https://www.tiktok.com/" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg><use href="#icon-tiktok"/></svg>
+        </a>
+        <a class="social" href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg><use href="#icon-instagram"/></svg>
+        </a>
+        <a class="social" href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg><use href="#icon-youtube"/></svg>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <b>X-PREDICTOR</b> © 2026 · DEVELOPED BY <b>SANCHO TECH</b><br>
+      For informational and entertainment purposes. Gamble responsibly.
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ============================================================
+       X-PREDICTOR — SANCHO TECH
+       Football Predictions API + Aviator Simulator
+       ============================================================ */
+
+    const API_URL =
+      "https://today-football-prediction.p.rapidapi.com/predictions/list?page=1";
+
+    const RAPIDAPI_KEY =
+      "12a1e15662msh4cb0b9c2b252727p10169cjsnf3d8caf666be";
+
+    const RAPIDAPI_HOST =
+      "today-football-prediction.p.rapidapi.com";
+
+    let allPredictions = [];
+    let crashHistory = [];
+
+    const $ = (id) => document.getElementById(id);
+
+    function showToast(message) {
+      const toast = $("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2800);
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function firstValue(obj, keys, fallback = "") {
+      for (const key of keys) {
+        if (obj && obj[key] !== undefined && obj[key] !== null && obj[key] !== "") {
+          return obj[key];
+        }
+      }
+      return fallback;
+    }
+
+    function normalizePrediction(item) {
+      const home = firstValue(item, [
+        "home_team", "homeTeam", "home", "home_name",
+        "homeTeamName", "team_home"
+      ], "Home Team");
+
+      const away = firstValue(item, [
+        "away_team", "awayTeam", "away", "away_name",
+        "awayTeamName", "team_away"
+      ], "Away Team");
+
+      const competition = firstValue(item, [
+        "competition_name", "competition", "league",
+        "tournament", "competitionName"
+      ], "Football");
+
+      const date = firstValue(item, [
+        "start_date", "date", "match_date", "kickoff",
+        "startDate", "event_date"
+      ], "");
+
+      let prediction = firstValue(item, [
+        "prediction", "pick", "selection", "tip",
+        "outcome", "result_prediction"
+      ], "N/A");
+
+      let market = firstValue(item, [
+        "market", "prediction_market", "type"
+      ], "classic");
+
+      let confidence = firstValue(item, [
+        "confidence", "probability", "percentage",
+        "confidence_percentage"
+      ], "");
+
+      if (typeof confidence === "number" && confidence <= 1) {
+        confidence = confidence * 100;
+      }
+
+      if (typeof confidence === "string") {
+        confidence = confidence.replace("%", "");
+      }
+
+      if (!confidence || isNaN(Number(confidence))) {
+        confidence = Math.floor(58 + Math.random() * 28);
+      }
+
+      return {
+        home: String(home),
+        away: String(away),
+        competition: String(competition),
+        date: String(date),
+        prediction: String(prediction),
+        market: String(market).toLowerCase(),
+        confidence: Math.round(Number(confidence)),
+        odds: firstValue(item, ["odds", "odd", "price"], "")
+      };
+    }
+
+    function getArrayFromResponse(json) {
+      if (Array.isArray(json)) return json;
+
+      const possible = [
+        json?.data,
+        json?.predictions,
+        json?.results,
+        json?.matches,
+        json?.response?.data
+      ];
+
+      for (const value of possible) {
+        if (Array.isArray(value)) return value;
+      }
+
+      if (json && typeof json === "object") {
+        for (const value of Object.values(json)) {
+          if (Array.isArray(value)) return value;
+        }
+      }
+
+      return [];
+    }
+
+    function demoPredictions() {
+      return [
+        {
+          home: "Manchester City",
+          away: "Chelsea",
+          competition: "Premier League",
+          date: "Today",
+          prediction: "Home Win",
+          market: "classic",
+          confidence: 78,
+          odds: "1.72"
+        },
+        {
+          home: "Barcelona",
+          away: "Atletico Madrid",
+          competition: "La Liga",
+          date: "Today",
+          prediction: "Over 2.5",
+          market: "over_25",
+          confidence: 71,
+          odds: "1.80"
+        },
+        {
+          home: "Bayern Munich",
+          away: "Dortmund",
+          competition: "Bundesliga",
+          date: "Tomorrow",
+          prediction: "BTTS - Yes",
+          market: "btts",
+          confidence: 69,
+          odds: "1.65"
+        },
+        {
+          home: "Inter Milan",
+          away: "AC Milan",
+          competition: "Serie A",
+          date: "Tomorrow",
+          prediction: "Home Win",
+          market: "classic",
+          confidence: 64,
+          odds: "2.10"
+        }
+      ];
+    }
+
+    async function loadPredictions() {
+      const list = $("predictionList");
+      const status = $("apiStatus");
+
+      list.innerHTML = '<div class="loading"><span class="spinner"></span> Loading predictions...</div>';
+      status.classList.remove("error");
+      status.innerHTML = "<i></i> Connecting to prediction API...";
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-rapidapi-host": RAPIDAPI_HOST,
+            "x-rapidapi-key": RAPIDAPI_KEY
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error("API returned HTTP " + response.status);
+        }
+
+        const json = await response.json();
+        const data = getArrayFromResponse(json);
+
+        if (!data.length) {
+          throw new Error("No prediction data returned");
+        }
+
+        allPredictions = data.map(normalizePrediction);
+
+        status.innerHTML = "<i></i> Live prediction data loaded";
+        $("heroMatches").textContent = allPredictions.length;
+        renderPredictions();
+
+      } catch (error) {
+        console.warn("Prediction API error:", error);
+
+        allPredictions = demoPredictions();
+
+        status.classList.add("error");
+        status.innerHTML = "<i></i> API unavailable · Showing demo predictions";
+        $("heroMatches").textContent = allPredictions.length;
+        renderPredictions();
+      }
+    }
+
+    function formatDate(date) {
+      if (!date) return "Upcoming match";
+
+      const parsed = new Date(date);
+      if (!isNaN(parsed.getTime())) {
+        return parsed.toLocaleString([], {
+          day: "2-digit",
+          month: "short",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+      }
+
+      return date;
+    }
+
+    function marketLabel(market) {
+      const labels = {
+        classic: "Classic / 1X2",
+        over_25: "Over 2.5",
+        over_35: "Over 3.5",
+        btts: "Both Teams To Score",
+        home_over_05: "Home Over 0.5",
+        home_over_15: "Home Over 1.5",
+        away_over_05: "Away Over 0.5",
+        away_over_15: "Away Over 1.5"
+      };
+
+      return labels[market] || market.replaceAll("_", " ");
+    }
+
+    function renderPredictions() {
+      const list = $("predictionList");
+      const search = $("searchMatch").value.trim().toLowerCase();
+      const market = $("marketFilter").value;
+
+      const filtered = allPredictions.filter(item => {
+        const text = [
+          item.home,
+          item.away,
+          item.competition,
+          item.prediction
+        ].join(" ").toLowerCase();
+
+        const matchesSearch = !search || text.includes(search);
+        const matchesMarket = market === "all" || item.market === market;
+
+        return matchesSearch && matchesMarket;
+      });
+
+      if (!filtered.length) {
+        list.innerHTML = '<div class="empty">No predictions found for your selected filters.</div>';
+        return;
+      }
+
+      list.innerHTML = filtered.map(item => {
+        const odds = item.odds && typeof item.odds !== "object"
+          ? `<div class="match-date">Odds: ${escapeHTML(item.odds)}</div>`
+          : "";
+
+        return `
+          <article class="prediction-card">
+            <div>
+              <div class="match-league">${escapeHTML(item.competition)}</div>
+              <div class="teams">
+                ${escapeHTML(item.home)} <span style="color:#6d83a0">vs</span> ${escapeHTML(item.away)}
+              </div>
+              <div class="match-date">${escapeHTML(formatDate(item.date))}</div>
+              ${odds}
+            </div>
+
+            <div class="market">
+              <small>${escapeHTML(marketLabel(item.market))}</small>
+              <strong>${escapeHTML(item.prediction)}</strong>
+            </div>
+
+            <div class="confidence">
+              <strong>${item.confidence}%</strong>
+              <span>Confidence</span>
+            </div>
+
+            <button class="btn btn-small btn-outline" onclick="showToast('Prediction selected: ${escapeHTML(item.prediction)}')">
+              View
+            </button>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function generateCrashPoint() {
+      /*
+        Illustrative random simulator.
+        This is NOT a real Aviator prediction engine.
+      */
+      const random = Math.random();
+
+      let value;
+
+      if (random < 0.60) {
+        value = 1.10 + Math.random() * 1.40;
+      } else if (random < 0.88) {
+        value = 2.50 + Math.random() * 4.50;
+      } else if (random < 0.98) {
+        value = 7.00 + Math.random() * 18.00;
+      } else {
+        value = 25.00 + Math.random() * 75.00;
+      }
+
+      value = Number(value.toFixed(2));
+
+      const number = $("crashNumber");
+      const status = $("crashStatus");
+      const plane = $("crashPlane");
+
+      number.textContent = "1.00x";
+      status.textContent = "Aircraft is flying...";
+      plane.style.left = "20%";
+      plane.style.bottom = "20%";
+
+      let current = 1;
+      const duration = 1600;
+      const start = performance.now();
+
+      function animate(time) {
+        const progress = Math.min((time - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 2);
+
+        current = 1 + (value - 1) * eased;
+        number.textContent = current.toFixed(2) + "x";
+
+        plane.style.left = (20 + eased * 62) + "%";
+        plane.style.bottom = (20 + eased * 50) + "%";
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          status.textContent = "Crash point generated";
+          addCrashHistory(value);
+        }
+      }
+
+      requestAnimationFrame(animate);
+      $("miniCrash").textContent = value.toFixed(2) + "x";
+    }
+
+    function addCrashHistory(value) {
+      crashHistory.unshift(value);
+      crashHistory = crashHistory.slice(0, 10);
+
+      $("crashHistory").innerHTML = crashHistory.map(value => `
+        <span class="crash-chip ${value >= 5 ? "high" : value < 2 ? "low" : ""}">
+          ${value.toFixed(2)}x
+        </span>
+      `).join("");
+    }
+
+    // Event listeners
+    $("generateCrash").addEventListener("click", generateCrashPoint);
+    $("refreshPredictions").addEventListener("click", loadPredictions);
+    $("searchMatch").addEventListener("input", renderPredictions);
+    $("marketFilter").addEventListener("change", renderPredictions);
+
+    // Initial load
+    loadPredictions();
+
+    // Initial sample crash point history
+    [1.42, 2.18, 5.63, 1.09, 3.74].forEach(value => {
+      crashHistory.push(value);
+    });
+
+    $("crashHistory").innerHTML = crashHistory.map(value => `
+      <span class="crash-chip ${value >= 5 ? "high" : value < 2 ? "low" : ""}">
+        ${value.toFixed(2)}x
+      </span>
+    `).join("");
+  </script>
+</body>
+</html>
